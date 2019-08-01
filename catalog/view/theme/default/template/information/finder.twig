@@ -1,0 +1,487 @@
+{{ header }}
+
+<div class="container" id="finder">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li>
+                <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="row">{{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+        <div id="content" class="{{ class }}">
+            {{ content_top }}
+            <h1>{{ heading_title }}</h1>
+            <h3>{{ description }}</h3>
+
+            {% for error in errors %}
+                <div class="alert alert-danger">
+                    <strong>Error!</strong> {{ error }}.
+                </div>
+            {% endfor %}
+
+            <div id="maps-container" style="height:400px; width:100%;color:black;"></div>
+
+            {% if markers|length == 0 %}
+                <div id="vendor_error_message">
+                    <h1 style="color:yellow;"
+                        class="text-center">Sorry, at the moment there is any vendor avaible. Try again later.</h1>
+                </div>
+            {% endif %}
+
+            {{ content_bottom }}
+        </div>
+        {{ column_right }}
+    </div>
+
+    <!-- Book modal -->
+    <div class="modal fade" id="bookModal" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel"
+        aria-hidden="true" style="color:black">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-black" id="certModalLabel">
+                        {% if logged %}
+                            Book Now
+                        {% else %}
+                            Error
+                        {% endif %}
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    {% if logged %}
+                        Payment code goes here
+                    {% else %}
+                        {{ log_error }}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Book And Apply Modal -->
+    <div class="modal fade" id="bookApplyModal" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel"
+        aria-hidden="true" style="color:black">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-black" id="certModalLabel">
+                        {% if logged %}
+                            Select the date of application
+                        {% else %}
+                            <span class="text-danger">Error</span>
+                        {% endif %}
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    {% if logged %}
+                        <form id="bookingForm" method="post" action="index.php?route=information/finder">
+                            <input type='text' name="date" class='form-control' id='datepicker' placeholder='Please select Date' data-input><br>
+                            <input class='timepicker' id='timepicker' name='time'/>
+                            <input type="hidden" id="inputSupplierId" name="id_supplier">
+                        </form>
+                    {% else %}
+                        {{ log_error }}
+                    {% endif %}
+                </div>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    {% if logged %}
+                        <button class="btn btn-primary" id="submitButton" disabled="true">Book the appointment</button>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- success modal -->
+    <div class="modal fade" id="successModal" tabindex="-1" role="dialog" aria-labelledby="bookModalLabel"
+        aria-hidden="true" style="color:black">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3 class="modal-title text-black text-success" id="certModalLabel">
+                        Success
+                    </h3>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="modal-body">
+                    Your appointment was successfully set on {{  booking_date }} at {{ booking_time }}</pre>
+                </div>
+                <div class="modal-footer">
+                    <button id="close" type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{{ footer }}
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{ maps_token }}&callback=initMap"></script>
+
+<script>
+    var selectedSupplierId = null;
+
+    console.log("time: {{ time }}");  
+    console.log("date: {{ date }}");
+        
+
+    initBookingForm();
+    // Cycle all bookings of the day
+    function generateHourRange(hours){
+        var fullRange = [];
+        //console.log(hours);
+
+        hours.forEach(function(value) {
+            console.log("Entered foreach");
+            console.log("Time: " + value);
+            console.log(value);
+
+            // Range start object
+            let range_start_obj = moment(value, 'HH:mm');
+
+            // Add 30 minutes to date
+            var range_end_obj = moment(range_start_obj, 'HH:mm').add(30, 'm');
+
+            // Get data
+            let range_start = String(range_start_obj.format('HH:mm'));
+            let range_end = String(range_end_obj.format('HH:mm'));
+
+            let range = [range_start, range_end];
+            //10:00, 10:30
+            console.log("range of dates: " + range);
+            fullRange.push(range);
+        });
+        return fullRange;
+    }
+
+    function loadPickers(datetime){ 
+        let today = "{{ date }}";
+        let time = "{{ time }}";     
+        let minimumTime = "";
+        let min = "9:00";
+        
+        $('#timepicker').timepicker({
+            timeFormat: "H:i",
+            show2400: true,
+            minTime: min,
+            maxTime: "17:00",
+        });
+
+        $("#datepicker").flatpickr({
+            minDate: today,
+            time_24hr: true,
+            onChange : async function(selectedDates, dateStr, instance) {
+                
+                console.log("[!] Check DatePicker value");
+                manageSubmit();
+                
+                var hours = [];
+                // Gets all the booking hours of the day
+                Object.entries(datetime).forEach(([key, row]) => {
+                    if(key === dateStr){
+                        Object.entries(row).forEach(([key, hour]) => {
+                            hours.push(hour);
+                        });
+                    }
+                });
+                var ranges = generateHourRange(hours);
+                ranges.push(["17:01","8:59"]);
+
+
+                //format the date selected by the user in the date picker
+                var selection = moment(selectedDates.toString()).format("YYYY-MM-DD");
+
+                //the time parts [hours, minutes]
+                var timeParts = time.split(":");
+
+                //if the user selects the current date the minimum time mus be bigger than the current time
+                if(today === selection){
+                    //if it is after 9 am we change the minimum time 
+                    if(parseInt(timeParts[0]) >= 9){
+                        //the minutes until the next half hour
+                        var reminder = 30 - (parseInt(timeParts[1]) % 30);
+
+                        //the current date with the minimum time
+                        minimumTime = moment(time, "H:mm").add(reminder, "minutes").format("DD MMM YYYY HH:m");
+
+                        //only the minimum hour
+                        min = moment(minimumTime).hours();
+                        if(min == 12){
+                            min += ":" + moment(minimumTime).minutes();
+                        }else{
+                            if(moment(minimumTime).minutes() == 30){
+                                min += ":" + moment(minimumTime).minutes();
+                            }else{
+                                min += ":" + moment(minimumTime).minutes() + "0";
+                            }
+                        }  
+                        //the complete minimum time
+                        
+                    }else{
+                        //if it is 
+                        min = "9:00";
+                    }
+                }else{
+                    min = "9:00";
+                }
+                console.log("minimum: "+min);
+                
+                console.log("[!] Updating timepicker");
+                $('#timepicker').timepicker('option', { 'disableTimeRanges': ranges, 'minTime': min, 'show2400': true});
+            }
+        });
+
+    }
+        
+    let map;
+    let infowindowOpen = null;
+    function initMap() { // Center location of Ireland
+        let center_loc = {
+            lat: 53.305494,
+            lng: -7.737649
+        };
+
+        let irelandBounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(50.999929, -10.854492),
+            new google.maps.LatLng(55.354135, -5.339355));
+
+        // The map centered
+        map = new google.maps.Map(window.document.getElementById('maps-container'), {
+            zoom: 7,
+            center: center_loc,
+            styles: [
+                {elementType: 'geometry', stylers: [{color: '#242f3e'}]},
+                {elementType: 'labels.text.stroke', stylers: [{color: '#242f3e'}]},
+                {elementType: 'labels.text.fill', stylers: [{color: '#746855'}]},
+                {
+                    featureType: 'administrative.locality',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#d59563'}]
+                },
+                {
+                    featureType: 'poi',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#d59563'}]
+                },
+                {
+                    featureType: 'poi.park',
+                    elementType: 'geometry',
+                    stylers: [{color: '#263c3f'}]
+                },
+                {
+                    featureType: 'poi.park',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#6b9a76'}]
+                },
+                {
+                    featureType: 'road',
+                    elementType: 'geometry',
+                    stylers: [{color: '#38414e'}]
+                },
+                {
+                    featureType: 'road',
+                    elementType: 'geometry.stroke',
+                    stylers: [{color: '#212a37'}]
+                },
+                {
+                    featureType: 'road',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#9ca5b3'}]
+                },
+                {
+                    featureType: 'road.highway',
+                    elementType: 'geometry',
+                    stylers: [{color: '#746855'}]
+                },
+                {
+                    featureType: 'road.highway',
+                    elementType: 'geometry.stroke',
+                    stylers: [{color: '#1f2835'}]
+                },
+                {
+                    featureType: 'road.highway',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#f3d19c'}]
+                },
+                {
+                    featureType: 'transit',
+                    elementType: 'geometry',
+                    stylers: [{color: '#2f3948'}]
+                },
+                {
+                    featureType: 'transit.station',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#d59563'}]
+                },
+                {
+                    featureType: 'water',
+                    elementType: 'geometry',
+                    stylers: [{color: '#17263c'}]
+                },
+                {
+                    featureType: 'water',
+                    elementType: 'labels.text.fill',
+                    stylers: [{color: '#515c6d'}]
+                },
+                {
+                    featureType: 'water',
+                    elementType: 'labels.text.stroke',
+                    stylers: [{color: '#17263c'}]
+                }
+            ],
+            restriction: {
+                latLngBounds: irelandBounds,
+                strictBounds: false,
+            },
+        });
+        addMarkers(map);
+    }
+
+    function addMarkers(map) { // Create infobox and add listener to marker
+        {% for marker in markers %}
+        // Build an infobox
+        let contentString{{ marker.supplier_id }} = `
+                <div class='content modal-body'>
+                    <h1 style='color:black;'>{{ marker.company_name }} - {{ marker.city }}</h1>
+
+                    <strong>Address</strong> {{ marker.house_number }}, {{ marker.street }}, {{ marker.city }}
+                    <br>
+                    <strong>Phone</strong> {{ marker.phone }}
+                    <br><br>
+                    <div class='btn-toolbar booking'>
+                        <button id='buttonBook' type="button" class="btn btn-primary center-block" data-toggle="modal" data-target="#bookModal">Book</button>
+                        <button id='buttonApplyBook' type="button" class="btn btn-primary center-block pull-right" data-toggle="modal" data-target="#bookApplyModal">Book and Apply</button>
+                    </div>
+                </div>`;
+
+        // Get company location
+        let location{{ marker.supplier_id }} = {
+            lat: {{ marker.location_lat }},
+            lng: {{ marker.location_lng }}
+        };
+
+        // Create the infobox object
+        let infowindow{{ marker.supplier_id }} = new google.maps.InfoWindow({content: contentString{{ marker.supplier_id }}});
+
+        // Create the marker
+        let marker{{ marker.supplier_id }} = new google.maps.Marker({
+            position: location{{ marker.supplier_id }},
+            map: map,
+            animation: google.maps.Animation.DROP,
+            title: '{{ marker.company_name }}'
+        });
+
+        // Add a click event listern to show the related infobox and do a little animation when clicked
+        marker{{ marker.supplier_id }}.addListener('click', function () {
+            selectedSupplierId = {{ marker.supplier_id }};
+
+            // Close infoWindows is there is one open
+            if (infowindowOpen != null){
+                infowindowOpen.close();
+            }
+
+            // Open new infoWindow
+            infowindow{{ marker.supplier_id }}.open(map, marker{{ marker.supplier_id }});
+
+            // Replace current infoWindow with the one before
+            infowindowOpen = infowindow{{ marker.supplier_id }};
+
+            // Start animation and center the marker
+            startAnimation(marker{{ marker.supplier_id }}, 3000);
+            map.setZoom(13);
+            map.setCenter(marker{{ marker.supplier_id }}.getPosition());
+
+            var datetime = [];
+
+            // Loads all the marker data
+            {% for name, item in bookings %}
+                {% if name == marker.supplier_id %}
+                    // generate unique datetime keys
+
+                    {% for datetime in item %}
+
+                        if (datetime["{{ datetime.date }}"] == undefined){
+                            datetime["{{ datetime.date }}"] = [];
+                        }
+
+                        datetime["{{ datetime.date }}"].push('{{ datetime.time }}');
+                    {% endfor %}
+                {% endif %}
+            {% endfor %}
+
+            console.log("Found this bookings for this vendor:");
+            console.log(datetime);
+
+            // Pass the data to the pickers
+            loadPickers(datetime);
+        });
+
+        // Todo: Add click event on "Zoom" option in the infobox
+        console.log("Added marker at: " + {{ marker.location_lat }} +":" + {{ marker.location_lng }}){% endfor %}
+    }
+
+    function startAnimation(marker, timeout) {
+        console.log("[!] Started animation on marker " + marker.getPosition() + " for " + timeout + "ms")
+
+        marker.setAnimation(google.maps.Animation.BOUNCE);
+
+        window.setTimeout(function () {
+            marker.setAnimation(null);
+        }, timeout);
+    }
+
+    function initBookingForm(){
+        // Add listener for form
+        $('#submitButton').click(function (){
+            $('#inputSupplierId').val(selectedSupplierId);
+            $('#bookingForm').submit();
+        });
+
+        $("#timepicker").on( "change", function() {
+            console.log("[!] Check TimePicker value");
+            manageSubmit();
+        });
+    }
+
+    function checkInputValue(){
+        let time = $('#timepicker').val();
+        let date = $('#datepicker').val();
+
+        return (time !== "" && date !== "");
+    }   
+
+    function manageSubmit(){
+        if(checkInputValue()){
+            $('#submitButton').prop('disabled',false);
+        }
+        else{
+            $('#submitButton').prop('disabled',true);
+        }
+    }
+
+    {% if booking_success %}
+        $("#successModal").modal();
+
+        {% set booking_success = false %}
+    {% endif %}
+
+</script>

@@ -1,0 +1,38 @@
+<div class="swiper-viewport">
+    <div class="swiper-container" id="slideshow{{ module }}">
+        <div class="swiper-wrapper">
+            {% for banner in banners %}
+                <div class="swiper-slide text-center">
+                    {% if banner.link %}
+                        <a href="{{ banner.link }}"><img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive"/></a>
+                    {% else %}
+                        <div>
+                            <img src="{{ banner.image }}" alt="{{ banner.title }}" class="img-responsive"/>
+                            <div class="carousel-title">
+                                <h1>{{banner.title}}</h1>
+                                <div class="btn-link-div"> 
+                                    <a id="slideshow-button" href="http://192.168.1.23:8123/Lavoro/AutoCloudTech/upload/index.php?route=product/product&product_id=50&search=dux" class="btn btn-primary btn-purchase">Purchase Now - Only 29.90	&euro;</a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+
+    var a = new Swiper("#slideshow{{module}}",{
+        loop: true,
+        slidesPerView: 1,
+        mode: 'horizontal',
+        autoplayDisableOnInteraction: true,
+        paginationClickable: true,
+        spaceBetween: 30,
+        autoplay: 2500,
+        effect: 'cube',
+    });
+
+    a.init();
+</script>

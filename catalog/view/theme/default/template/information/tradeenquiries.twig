@@ -1,0 +1,82 @@
+{{ header }}
+
+<div class="container" id="tradeEnquiries">
+
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li>
+                <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <div class="row">{{ column_left }}
+        {% if column_left and column_right %}
+            {% set class = 'col-sm-6' %}
+        {% elseif column_left or column_right %}
+            {% set class = 'col-sm-9' %}
+        {% else %}
+            {% set class = 'col-sm-12' %}
+        {% endif %}
+
+        <div id="content" class="{{ class }}">
+            {{ content_top }}
+
+            <!-- First row -->
+            <div class="modal-body row text-center">
+                <h1>{{ fist_section_title }}</h1>
+                <div class="text-content">
+                    {{ first_section_content }}
+                </div>
+
+                <br>
+                <br>
+
+                <!-- Pictures in two separate columns -->
+                <div class="col-md-6">
+                    <!-- First column -->
+                    <div class="thumbnail">
+                        <img class="img-responsive center-block" style="width: 70%;" src="image/catalog/trade_enquiries/trade_enquiries1.jpg" alt="duxback workshop box">
+
+                        <div class="caption  text-content">
+                            <p>Duxback Workshop Box</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <!-- Second column -->
+                    <div class="thumbnail">
+                        <img class="img-responsive center-block" style="width: 70%;" src="image/catalog/trade_enquiries/trade_enquiries2.jpg" alt="duxback one car kit">
+
+                        <div class="caption text-content">
+                            <p>Duxback 1 Car Kit</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr>
+
+            <!-- Second row -->
+            <div class="modal-body row text-center">
+                <h1 class="center-text"><strong>{{ second_section_content }}</strong></h1>
+                <p class="text-right text-warning">~ <strong>{{ site_name }}</strong></p>
+            </div>
+
+            <hr>
+            <!-- Third row -->
+            <div class="modal-body row text-center">
+                <h1>{{ third_section_title  }}</h1>
+                <div class="text-content">
+                    {{ third_section_content }}
+                </div>
+            </div>
+
+            {{ content_bottom }}
+        </div>
+        {{ column_right }}
+    </div>
+</div>
+{{ footer }}

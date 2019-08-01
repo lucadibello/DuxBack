@@ -1,0 +1,388 @@
+{{ header }}
+<div class="container" id="information-information">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li>
+                <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h1>Become a distributor</h1>
+    {% for error in errors %}
+        <div class="alert alert-danger">
+            <strong>Error!</strong> {{ error }}.
+        </div>
+    {% endfor %}
+
+    <div class="col-md-offset-2 col-md-10">
+        <form action="index.php?route=information/distributor" class="form-horizontal" id="register-form" method="post">
+
+            <div class="form-group col-md-10 ">
+                <h3 class="header-form-group">Contacts</h3>
+                <div id="company-name-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="company_name">Company Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="name" name="company_name" placeholder="Company name" type="text">
+                        <div id="error-company-name" class="alert alert-danger" role="alert">Please enter a valid company name</div>
+                    </div>
+                </div>
+                <div id="phone-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="phone">Phone</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                        <div id="error-phone" class="alert alert-danger" role="alert" >Please enter a valid phone number</div>
+                    </div>
+                </div>
+                <div id="email-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="email">Email</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="email" name="email" placeholder="Email" type="text">
+                        <div id="error-email" class="alert alert-danger" role="alert" >Please enter a valid email address</div>
+                    </div>
+                </div>
+                <div id="website-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="website">Website</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="website" name="company_website" placeholder="Website" type="text">
+                        <div id="error-website" class="alert alert-danger" role="alert" >Please enter a valid website</div>
+                    </div>
+                </div>
+                <div id="firstname-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="firstname">Manager First Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="firstname" name="manager_firstname" placeholder="Company manager first name" type="text">
+                        <div id="error-firstname" class="alert alert-danger" role="alert" >Please enter a valid firstname</div>
+                    </div>
+                </div>
+                <div id="lastname-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="lastname">Manager Last Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="lastname" name="manager_lastname" placeholder="Company manager last name" type="text">
+                        <div id="error-lastname" class="alert alert-danger" role="alert" >Please enter a valid lastname</div>
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-10">
+                <h3 class="header-form-group">Position</h3>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="region">County</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="region" name="region" placeholder="Region">
+                            <option>Antrim</option>
+                            <option>Armagh</option>
+                            <option>Carlow</option>
+                            <option>Cavan</option>
+                            <option>Clare</option>
+                            <option>Cork</option>
+                            <option>Derry</option>
+                            <option>Donegal</option>
+                            <option>Down</option>
+                            <option>Dublin</option>
+                            <option>Fermanagh</option>
+                            <option>Galway</option>
+                            <option>Kerry</option>
+                            <option>Kildare</option>
+                            <option>Kilkenny</option>
+                            <option>Laois</option>
+                            <option>Leitrim</option>
+                            <option>Limerick</option>
+                            <option>Longford</option>
+                            <option>Louth</option>
+                            <option>Mayo</option>
+                            <option>Meath</option>
+                            <option>Monaghan</option>
+                            <option>Offaly</option>
+                            <option>Roscommon</option>
+                            <option>Sligo</option>
+                            <option>Tipperary</option>
+                            <option>Tyrone</option>
+                            <option>Waterford</option>
+                            <option>Westmeath</option>
+                            <option>Wexford</option>
+                            <option>Wicklow</option>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label class="col-sm-2 control-label" for="postalcode">Postal Code</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="postalcode" name="postalcode" placeholder="Postal Code" type="text" >
+                    </div>
+                </div>-->
+                <div id="city-group" class="form-group">
+                    <label class="col-sm-2 control-label distributor-label" for="city">City</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="city" name="city" placeholder="City" type="text">
+                        <div id="error-city" class="alert alert-danger" role="alert" >Please enter a valid city</div>
+                    </div>
+                </div>
+                <div id="street-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="street">Street</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="street" name="street" placeholder="Street" type="text">
+                        <div id="error-street" class="alert alert-danger" role="alert" >Please enter a valid street</div>
+                    </div>
+                </div>
+                <div id="number-group" class="form-group">
+                    <label class="col-sm-2 control-label" for="number">House Number</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="number" name="house_number" placeholder="House number" type="text">
+                        <div id="error-number" class="alert alert-danger" role="alert" >Please enter a valid house number</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-10">
+                    <input class="btn btn-default" type="button" id="position" value="check your position"> 
+                </div>
+            </div>
+
+            <div class="form-group">
+                <p class="btn btn-default" disabled="disabled" id="submit"> Register </p>
+            </div>
+
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+        </form>
+    </div>
+    <div class="map-container">
+            <div class="col-md-6 col-md-offset-3" id="map"></div>
+        </div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_token}}&callback=initMap"></script>
+</div>
+<script>
+    let submitInvoked = false;
+
+    function submitForm(lat, long){
+        $('#lat').val(lat);
+        $('#lng').val(long);
+        $('#register-form').submit();
+    }
+    
+    var region;
+    var city;
+    var street;
+    var number;
+    var marker;
+    document.getElementById("position").addEventListener("click", function(){
+        region = document.getElementById("region").value;
+        city = document.getElementById("city").value;
+        street = document.getElementById("street").value;
+        number = document.getElementById("number").value;
+    });
+    function initMap() {
+        let myLatLng = {
+            lat: 51.8979282,
+            lng: -8.4705806
+        };
+
+        let irelandBounds = new google.maps.LatLngBounds(
+            new google.maps.LatLng(50.999929, -10.854492),
+            new google.maps.LatLng(55.354135, -5.339355));
+
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: myLatLng,
+            restriction: {
+                latLngBounds: irelandBounds,
+                strictBounds: false,
+            }
+        });
+
+        var geocoder = new google.maps.Geocoder();
+        document.getElementById('position').addEventListener('click', function() {
+            if(marker != null){
+                marker.setMap(null);
+            }
+            geocodeAddress(geocoder, map);
+        });
+        document.getElementById('submit').addEventListener('click', function() {
+            submitInvoked = true;
+            geocodeAddress(geocoder, map);
+        });
+    }
+
+    function geocodeAddress(geocoder, resultsMap) {
+        if(region != '' && city != '' && street != '' && number != ''){
+            var address = 'Ireland, County ' + region + ', ' + city + ', ' + street + ', ' + number;
+            
+            geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                resultsMap.setCenter(results[0].geometry.location);
+                marker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location
+                });
+                map.setZoom(16);
+                map.panTo(marker.position);
+
+                let lat = results[0].geometry.location.lat();
+                let lng = results[0].geometry.location.lng();
+
+                if(submitInvoked){
+                    submitForm(lat, lng);
+                }
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+            });
+        }else{
+
+        }
+    }
+    var inputs = [false, false, false, false, false, false, false, false, false];
+    $(document).ready(function () {
+        var validator = new Validator();
+        var min_value = 0;
+        var max_value = 50;
+        $("#name").keydown(function() {
+            var input = this.value;
+            if(validator.companyName(input, min_value, max_value)){
+                $('#company-name-group').addClass("has-success");
+                $('#company-name-group').removeClass("has-error");
+                $('#error-company-name').css("display", "none");
+                inputs[0] = true;
+            }else{
+                $('#company-name-group').addClass("has-error");
+                $('#company-name-group').removeClass("has-success");
+                $('#error-company-name').css("display", "block");
+                inputs[0] = false;
+            }
+            checkSubmit();
+        });
+        $("#phone").keydown(function() {
+            var input = this.value;            
+            if(validator.phone(input)){
+                $('#phone-group').addClass("has-success");
+                $('#phone-group').removeClass("has-error");
+                $('#error-phone').css("display", "none");
+                inputs[1] = true;
+            }else{
+                $('#phone-group').addClass("has-error");
+                $('#phone-group').removeClass("has-success");
+                $('#error-phone').css("display", "block");
+                inputs[1] = false;
+            }
+            checkSubmit();
+        });
+        $("#email").keydown(function() {
+            var input = this.value;
+            if(validator.email(input)){
+                $('#email-group').addClass("has-success");
+                $('#email-group').removeClass("has-error");
+                $('#error-email').css("display", "none");
+                inputs[2] = true;
+            }else{
+                $('#email-group').addClass("has-error");
+                $('#email-group').removeClass("has-success");
+                $('#error-email').css("display", "block");
+                inputs[2] = false;
+            }
+            checkSubmit();
+        });
+        $("#website").keydown(function() {
+            var input = this.value;
+            if(validator.website(input)){
+                $('#website-group').addClass("has-success");
+                $('#website-group').removeClass("has-error");
+                $('#error-website').css("display", "none");
+                inputs[3] = true;
+            }else{
+                $('#website-group').addClass("has-error");
+                $('#website-group').removeClass("has-success");
+                $('#error-website').css("display", "block");
+                inputs[3] = false;
+            }
+            checkSubmit();
+        });
+        $("#firstname").keydown(function() {
+            var input = this.value;
+            if(validator.name(input, min_value, max_value)){
+                $('#firstname-group').addClass("has-success");
+                $('#firstname-group').removeClass("has-error");
+                $('#error-firstname').css("display", "none");
+                inputs[4] = true;
+            }else{
+                $('#firstname-group').addClass("has-error");
+                $('#firstname-group').removeClass("has-success");
+                $('#error-firstname').css("display", "block");
+                inputs[4] = false;
+            }
+            checkSubmit();
+        });
+        $("#lastname").keydown(function() {
+            var input = this.value;
+            if(validator.surname(input, min_value, max_value)){
+                $('#lastname-group').addClass("has-success");
+                $('#lastname-group').removeClass("has-error");
+                $('#error-lastname').css("display", "none");
+                inputs[5] = true;
+            }else{
+                $('#lastname-group').addClass("has-error");
+                $('#lastname-group').removeClass("has-success");
+                $('#error-lastname').css("display", "block");
+                inputs[5] = false;
+            }   
+            checkSubmit();     
+        });
+        $("#city").keydown(function() {
+            var input = this.value;
+            if(validator.city(input)){
+                $('#city-group').addClass("has-success");
+                $('#city-group').removeClass("has-error");
+                $('#error-city').css("display", "none");
+                inputs[6] = true;
+            }else{
+                $('#city-group').addClass("has-error");
+                $('#city-group').removeClass("has-success");
+                $('#error-city').css("display", "block");
+                inputs[6] = false;
+            }
+            checkSubmit();
+        });
+        $("#number").keydown(function() {
+            var input = this.value;
+            if(validator.houseNumber(input)){
+                $('#number-group').addClass("has-success");
+                $('#number-group').removeClass("has-error");
+                $('#error-number').css("display", "none");
+                inputs[7] = true;
+            }else{
+                $('#number-group').addClass("has-error");
+                $('#number-group').removeClass("has-success");
+                $('#error-number').css("display", "block");
+                inputs[7] = false;
+            }
+            checkSubmit();
+        });
+        $("#street").keydown(function() {
+            var input = this.value;
+            if(validator.street(input, min_value, max_value)){
+                $('#street-group').addClass("has-success");
+                $('#street-group').removeClass("has-error");
+                $('#error-street').css("display", "none");
+                inputs[8] = true;
+            }else{
+                $('#street-group').addClass("has-error");
+                $('#street-group').removeClass("has-success");
+                $('#error-street').css("display", "block");
+                inputs[8] = false;
+            }
+            checkSubmit();
+        });
+    });
+
+    function checkSubmit(){
+        for(var i = 0; i < inputs.length; i++){
+            if(inputs[i] != true){
+                console.log("false");
+                $('#submit').attr("disabled", true);
+                return;
+            }
+        }
+        $('#submit').attr("disabled", false);
+        return;
+    }
+</script>
+{{ footer }}

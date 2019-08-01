@@ -1,0 +1,13 @@
+User-agent: *
+Allow: image/
+Disallow: image/cache
+Allow: index.php?route=account/login
+Allow: index.php?route=account/register
+Allow: index.php?route=information/finder
+Allow: index.php?route=information/tradeenquiries
+Allow: index.php?route=information/distributor
+Allow: index.php?route=information/aboutduxback
+Allow: index.php?route=information/faq
+Disallow: admin/
+Disallow: catalog/
+Disallow: system/

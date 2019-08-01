@@ -1,0 +1,74 @@
+{% set first = true %}
+{% for module in modules %}
+{{ module }}
+	{% if first == true %}
+
+        <!-- About Duxback -->
+        <section id="about-us">
+            <h1>About Duxback</h1>
+            <h4 class="about text-content">
+                Duxback is a revolutionary glass treatment that creates a ‘hydrophobic’ effect on automotive glass. 
+                Originally developed for aviation and applied to Boeing cockpit glass, a Duxback treatment greatly improves 
+                safety when driving in pouring rain especially at night. When driving over 40mph, rain water will be blown straight 
+                off the glass, no need for wipers! In wintertime, ice will either not stick to the glass or will be much easier to remove.
+                Research has shown that visibility is improved by 35% when driving in pouring rain. Furthermore a driver’s ability to 
+                identify a small object when driving in foul conditions is improved by 25%. A 25% improvement in reaction time is 
+                58 feet at 40 MPH. Enough to save a life!
+            </h4>
+        </section>
+        <hr>
+        <section id="infos">
+            <div class="row cert">
+                <div class="col-md-6">
+                    <h1>
+                        Duxback Is A Certified Product Approved By TÜV Thüringen   
+                    </h1>
+                    <br>
+                    <p class="text-content">
+                        TÜV is the largest independent testing and assessment organization in the world. 
+                        Recognized by Governments, Industry and Consumers alike.
+                    </p>
+                    <h2>
+                        <b>If the TÜV says it works. It works.</b>
+                    </h2>
+
+                    <!-- Button trigger modal -->
+                    <button type="button" class="btn-lg btn-primary btn-block" data-toggle="modal" data-target="#certModal">
+                        See our certificate
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <img class="img-responsive center-block" src="image/catalog/tuv-logo.png" />
+                </div>
+            </div>
+        </section>
+        <section id="video" style="margin-top:2.5em;">
+            <div class="embed-responsive embed-responsive-16by9">
+                <iframe src="https://www.youtube.com/embed/xW9hLOBzryA" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+        </section>
+        <hr>
+
+        <!-- MODAL -->
+        <div class="modal fade" id="certModal" tabindex="-1" role="dialog" aria-labelledby="certModalLabel" aria-hidden="true" style="color:black">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h3 class="modal-title text-black" id="certModalLabel">TUV Certificate</h3>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <!-- Trigger the Modal -->
+                        <img id="tuv_cert" src="image/catalog/tuv-certificate.jpg" alt="TUV Certificate" style="width:100%">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>  
+        {% set first = false %}
+	{% endif %}
+{% endfor %}

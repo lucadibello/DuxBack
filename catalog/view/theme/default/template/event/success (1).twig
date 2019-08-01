@@ -1,0 +1,308 @@
+{{ header }}
+<div class="container" id="information-information">
+    <ul class="breadcrumb">
+        {% for breadcrumb in breadcrumbs %}
+            <li>
+                <a href="{{ breadcrumb.href }}">{{ breadcrumb.text }}</a>
+            </li>
+        {% endfor %}
+    </ul>
+    <h1>Become a distributor</h1>
+
+    {% for err in error %}
+        <div class="alert alert-danger">
+            {{ err }}
+        </div>
+    {% endfor %}
+    <div class="col-md-offset-2 col-md-10">
+        <form action="index.php?route=information/distributor" class="form-horizontal" id="register-form" method="post">
+            <div class="form-group col-md-10 ">
+                <h3 class="header-form-group">Contacts</h3>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="company_name">Company Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="name" name="company_name" placeholder="Company name" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="phone">Phone</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="phone" name="phone" placeholder="Phone" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="email">Email</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="email" name="email" placeholder="Email" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="website">Website</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="website" name="company_website" placeholder="Website"
+                        type="text" data-validation="url" data-validation-error-msg="You did not enter a valid website" >
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="firstname">Manager First Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="firstname" name="manager_firstname" placeholder="Company manager first name" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="lastname">Manager Last Name</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="lastname" name="manager_lastname" placeholder="Company manager last name"
+                        type="text">
+                    </div>
+                </div>
+            </div>
+            <div class="form-group col-md-10">
+                <h3 class="header-form-group">Position</h3>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="region">County</label>
+                    <div class="col-sm-10">
+                        <select class="form-control" id="region" name="region" placeholder="Region">
+                            <option>Antrim</option>
+                            <option>Armagh</option>
+                            <option>Carlow</option>
+                            <option>Cavan</option>
+                            <option>Clare</option>
+                            <option>Cork</option>
+                            <option>Derry</option>
+                            <option>Donegal</option>
+                            <option>Down</option>
+                            <option>Dublin</option>
+                            <option>Fermanagh</option>
+                            <option>Galway</option>
+                            <option>Kerry</option>
+                            <option>Kildare</option>
+                            <option>Kilkenny</option>
+                            <option>Laois</option>
+                            <option>Leitrim</option>
+                            <option>Limerick</option>
+                            <option>Longford</option>
+                            <option>Louth</option>
+                            <option>Mayo</option>
+                            <option>Meath</option>
+                            <option>Monaghan</option>
+                            <option>Offaly</option>
+                            <option>Roscommon</option>
+                            <option>Sligo</option>
+                            <option>Tipperary</option>
+                            <option>Tyrone</option>
+                            <option>Waterford</option>
+                            <option>Westmeath</option>
+                            <option>Wexford</option>
+                            <option>Wicklow</option>
+                        </select>
+                    </div>
+                </div>
+                <!--<div class="form-group">
+                    <label class="col-sm-2 control-label" for="postalcode">Postal Code</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="postalcode" name="postalcode" placeholder="Postal Code" type="text" >
+                    </div>
+                </div>-->
+                <div class="form-group">
+                    <label class="col-sm-2 control-label distributor-label" for="city">City</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="city" name="city" placeholder="City" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="street">Street</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="street" name="street" placeholder="Street" type="text">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label class="col-sm-2 control-label" for="number">House Number</label>
+                    <div class="col-sm-10">
+                        <input class="form-control" id="number" name="house_number" placeholder="House number" type="text">
+                    </div>
+                </div>
+            </div>
+            
+            <div class="form-group">
+                <div class="col-sm-offset-4 col-sm-10">
+                    <input class="btn btn-default" type="button" id="position" value="check your position"> 
+                </div>
+            </div>
+
+            <input type="hidden" name="lat" id="lat">
+            <input type="hidden" name="lng" id="lng">
+
+            <input class="btn btn-default" type="button" value="submit" disabled="disabled">
+            <p class="btn btn-primary" id="submit" >Submit 2 hEre</p>
+        </form>
+    </div>
+    <div class="map-container">
+            <div class="col-md-6 col-md-offset-3" id="map"></div>
+        </div>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key={{google_token}}&callback=initMap"></script>
+</div>
+<script>
+    let submitInvoked = false;
+
+    function submitForm(lat, long){
+        $('#lat').val(lat);
+        $('#lng').val(long);
+
+        $('#register-form').submit();
+    }
+    
+    var region;
+    var city;
+    var street;
+    var number;
+    document.getElementById("position").addEventListener("click", function(){
+        region = document.getElementById("region").value;
+        city = document.getElementById("city").value;
+        street = document.getElementById("street").value;
+        number = document.getElementById("number").value;
+    });
+    function initMap() {
+        let myLatLng = {
+            lat: 51.8979282,
+            lng: -8.4705806
+        };
+        map = new google.maps.Map(document.getElementById('map'), {
+            zoom: 4,
+            center: myLatLng
+        });
+        var geocoder = new google.maps.Geocoder();
+        document.getElementById('position').addEventListener('click', function() {
+            geocodeAddress(geocoder, map);
+        });
+        document.getElementById('submit').addEventListener('click', function() {
+            submitInvoked = true;
+            geocodeAddress(geocoder, map);
+        });
+    }
+
+    function geocodeAddress(geocoder, resultsMap) {
+        console.log("region: " + region);
+        console.log("city: " + city);
+        console.log("street: " + street);
+        console.log("number: " + number);
+        if(region != '' && city != '' && street != '' && number != ''){
+            var address = 'Ireland, County ' + region + ', ' + city + ', ' + street + ', ' + number;
+            geocoder.geocode({'address': address}, function(results, status) {
+            if (status === 'OK') {
+                resultsMap.setCenter(results[0].geometry.location);
+                var marker = new google.maps.Marker({
+                    map: resultsMap,
+                    position: results[0].geometry.location
+                });
+                map.setZoom(16);
+                map.panTo(marker.position);
+
+                let lat = results[0].geometry.location.lat();
+                let lng = results[0].geometry.location.lng();
+
+                if(submitInvoked){
+                    submitForm(lat, lng);
+                }
+            } else {
+                alert('Geocode was not successful for the following reason: ' + status);
+            }
+            });
+        }else{
+
+        }
+    }
+
+    $("#register-form").validate({
+        onfocusout: false,
+        rules: {
+            company_name: {
+                required: true,
+                maxlength: 255
+            },
+            postalcode: {
+                required: false,
+                maxlength: 16
+            },
+            house_number: {
+                required: true,
+                maxlength: 10  
+            },
+            street: {
+                required: true,
+                maxlength: 50
+            },
+            city: {
+                required: true,
+                lettersonly: true,
+                maxlength: 50  
+            },
+            manager_firstname: {
+                required: true,
+                lettersonly: true,
+                maxlength: 50
+            },
+            manager_lastname: {
+                required: true,
+                lettersonly: true,
+                maxlength: 50
+            },
+            phone: {
+                required: true,
+                maxlength: 12,
+                minlength: 8
+            },
+            email: {
+                required: true,
+                email: true
+            },
+            company_website: {
+                required: true,
+            }
+        },
+        messages: {
+            company_name: {
+                required: "This field is required",
+            },
+            postalcode: {
+                required: "This field is required"
+            },
+            house_number: {
+                required: "This field is required"
+            },
+            street: {
+                required: "This field is required"
+            },
+            city: {
+                required: "This field is required",
+                lettersonly: "This field can contain only letters"
+            },
+            manager_firstname: {
+                required: "This field is required",
+                lettersonly: "This field can contain only letters"  
+            },
+            manager_lastname: {
+                required: "This field is required",
+                lettersonly: "This field can contain only letters"  
+            },
+            phone: {
+                required: "This field is required"
+            },
+            email: {
+                required: "This field is required",
+                email: "Your email address must be in the format of name@domain.com"
+            },
+            company_website: {
+                required: "This field is required",
+            }
+        }
+    });
+    $('input').on('blur keyup', function() {
+    if ($("#register-form").valid()) {
+        $('#submit').prop('disabled', false);  
+    } else {
+        $('#submit').prop('disabled', 'disabled');
+    }
+});
+</script>
+{{ footer }}
